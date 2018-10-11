@@ -15,6 +15,10 @@ import javax.ws.rs.core.Response;
 import org.homedns.cantisano.model.LojaJpaDAO;
 import org.homedns.cantisano.model.UsuarioJpaDAO;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.homedns.cantisano.ResponseMessage;
+
 /**
  * @author Bruno Cardoso Cantisano
  * url: "localhost:8080/RestfullShopping/rest/shop/"
@@ -28,98 +32,169 @@ import org.homedns.cantisano.model.UsuarioJpaDAO;
 public class ShoppingService implements IShopping {
 	UsuarioJpaDAO usuarioDAO = UsuarioJpaDAO.getInstance();
 	LojaJpaDAO lojaDAO = LojaJpaDAO.getInstance();
-	
+	private static final ObjectMapper objectMapper = new ObjectMapper();
+
 	@POST
 	@Path("/admin")
 	@Produces({MediaType.APPLICATION_JSON})
-	public String login(String jsonData) {
-		if(usuarioDAO.checkLogin(jsonData)) {
-			Response.status(200);
-			return "Login realizado com sucesso";
-		}
-		else {
-			Response.status(400);
-			return "Login inválido";
-		}
+	public Response login(String jsonData) {	
+		ResponseMessage ResponseRet = new ResponseMessage(); 
+		ResponseRet.setMsg("Não foi possível logar como admin!");
+		try {
+			if (usuarioDAO.checkLogin(jsonData)) {
+				ResponseRet.setCodErro(ResponseMessage.RET_OK);	
+			}
+			else{
+				ResponseRet.setCodErro(ResponseMessage.RET_ERROR);
+			}			
+			ResponseRet.setMsg(jsonData);
+			ResponseRet.setErrorMessage("Usuário logado com sucesso!");
+			jsonData = objectMapper.writeValueAsString(ResponseRet);
+		} catch (JsonProcessingException e) {
+			ResponseRet.setErrorMessage(e.getMessage());
+		}		
+		return Response.status(ResponseRet.getCodErro()).entity(jsonData).build();
 	}
-	
+
 	@POST
 	@Path("/loja")
 	@Produces({MediaType.APPLICATION_JSON})
-	public String add(String jsonData) {		
-		if(lojaDAO.persist(jsonData)) {
-			Response.status(200); 
-			return "Loja adicionada com sucesso!";			
-		}
-		Response.status(400); 
-		return "Loja adicionada com erro!";	
+	public Response add(String jsonData) {	
+		ResponseMessage ResponseRet = new ResponseMessage(); 
+		ResponseRet.setMsg("Não foi possível adicionar a loja!");
+		try {
+			if (lojaDAO.persist(jsonData)) {
+				ResponseRet.setCodErro(ResponseMessage.RET_OK);	
+			}
+			else{
+				ResponseRet.setCodErro(ResponseMessage.RET_ERROR);
+			}			
+			ResponseRet.setMsg(jsonData);
+			ResponseRet.setErrorMessage("Loja adicionada com sucesso!");
+			jsonData = objectMapper.writeValueAsString(ResponseRet);
+		} catch (JsonProcessingException e) {
+			ResponseRet.setErrorMessage(e.getMessage());
+		}		
+		return Response.status(ResponseRet.getCodErro()).entity(jsonData).build();
 	}
 
 	@PUT
 	@Path("/loja/{cnpj}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public String edit(@PathParam("cnpj") String jsonData) {
-		if(lojaDAO.merge(jsonData)) {
-			Response.status(200); 
-			return "Loja editada com sucesso!";			
-		}
-		Response.status(400); 
-		return "Loja editada com erro!";	
+	public Response edit(@PathParam("cnpj") String jsonData) {	
+		ResponseMessage ResponseRet = new ResponseMessage(); 
+		ResponseRet.setMsg("Não foi possível editar a loja!");
+		try {
+			if (lojaDAO.merge(jsonData)) {
+				ResponseRet.setCodErro(ResponseMessage.RET_OK);	
+			}
+			else{
+				ResponseRet.setCodErro(ResponseMessage.RET_ERROR);
+			}			
+			ResponseRet.setMsg(jsonData);
+			ResponseRet.setErrorMessage("Loja editada com sucesso!");
+			jsonData = objectMapper.writeValueAsString(ResponseRet);
+		} catch (JsonProcessingException e) {
+			ResponseRet.setErrorMessage(e.getMessage());
+		}		
+		return Response.status(ResponseRet.getCodErro()).entity(jsonData).build();
 	}
 
 	@DELETE
 	@Path("/loja/{cnpj}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public String delete(@PathParam("cnpj") String jsonData) {
-		if(lojaDAO.remove(jsonData)) {
-			Response.status(200); 
-			return "Loja removida com sucesso!";			
-		}
-		Response.status(400); 
-		return "Loja removida com erro!";	
+	public Response delete(@PathParam("cnpj") String jsonData) {		
+		ResponseMessage ResponseRet = new ResponseMessage(); 
+		ResponseRet.setMsg("Não foi possível remover a loja!");
+		try {
+			if (lojaDAO.remove(jsonData)) {
+				ResponseRet.setCodErro(ResponseMessage.RET_OK);	
+			}
+			else{
+				ResponseRet.setCodErro(ResponseMessage.RET_ERROR);
+			}			
+			ResponseRet.setMsg(jsonData);
+			ResponseRet.setErrorMessage("Loja removida com sucesso!");
+			jsonData = objectMapper.writeValueAsString(ResponseRet);
+		} catch (JsonProcessingException e) {
+			ResponseRet.setErrorMessage(e.getMessage());
+		}		
+		return Response.status(ResponseRet.getCodErro()).entity(jsonData).build();
 	}
 
 	@GET
 	@Path("/loja")
 	@Produces({MediaType.APPLICATION_JSON})
-	public String list() {
-		List<Loja> lst = lojaDAO.findAll();
-		if (lst != null) {
-			Response.status(200);	
-		}
-		else{
-			Response.status(400);
-		}
-		return lst.toString();
+	public Response list() {
+		ResponseMessage ResponseRet = new ResponseMessage(); 
+		ResponseRet.setMsg("Não foi possível listar as lojas!");
+		String jsonData = "";
+		try {
+			List<Loja> lst = lojaDAO.findAll();
+			if (lst != null) {
+				ResponseRet.setCodErro(ResponseMessage.RET_OK);	
+			}
+			else{
+				ResponseRet.setCodErro(ResponseMessage.RET_ERROR);
+			}			
+			String jsonList = objectMapper.writeValueAsString(lst);				
+			ResponseRet.setMsg(jsonList);
+			ResponseRet.setErrorMessage("Lojas listadas com sucesso!");
+			jsonData = objectMapper.writeValueAsString(ResponseRet);
+		} catch (JsonProcessingException e) {
+			ResponseRet.setErrorMessage(e.getMessage());
+		}		
+		return Response.status(ResponseRet.getCodErro()).entity(jsonData).build();
 	}
 
 	@GET
 	@Path("/loja/{cnpj}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public String search(@PathParam("cnpj") String jsonData) {
-		List<Loja> lstLojas = lojaDAO.findById(jsonData);
-		if (lstLojas != null) {
-			Response.status(200);
-			return lstLojas.toString();
-		}
-		else{
-			Response.status(400);
-		}
-		return "Não foi possível encontrar loja com este cnpj";
+	public Response search(@PathParam("cnpj") String jsonData) {		
+		ResponseMessage ResponseRet = new ResponseMessage(); 
+		ResponseRet.setMsg("Não foi possível listar a loja pelo cnpj!");
+		try {
+			List<Loja> lst = lojaDAO.findById(jsonData);
+			if (lst != null) {
+				ResponseRet.setCodErro(ResponseMessage.RET_OK);	
+			}
+			else{
+				ResponseRet.setCodErro(ResponseMessage.RET_ERROR);
+			}			
+			String jsonList = objectMapper.writeValueAsString(lst);				
+			ResponseRet.setMsg(jsonList);
+			ResponseRet.setErrorMessage("Loja listada com sucesso!");
+			jsonData = objectMapper.writeValueAsString(ResponseRet);
+		} catch (JsonProcessingException e) {
+			ResponseRet.setErrorMessage(e.getMessage());
+		}		
+		return Response.status(ResponseRet.getCodErro()).entity(jsonData).build();
 	}
 
 	@GET
 	@Path("/loja/{cnpj}/details")
 	@Produces({MediaType.APPLICATION_JSON})
-	public String details(@PathParam("cnpj") String jsonData) {
+	public Response details(@PathParam("cnpj") String jsonData) {
 		String[] segmentos = lojaDAO.findDetails(jsonData);
+		ResponseMessage ResponseRet = new ResponseMessage(); 
+		ResponseRet.setMsg("Não foi possível detalhar os segmentos da loja pelo cnpj!");
 		if (segmentos != null) {
-			Response.status(200);
-			return segmentos.toString();
+			ResponseRet.setCodErro(ResponseMessage.RET_OK);
+			String jsonSegmentos;
+			try {
+				jsonSegmentos = objectMapper.writeValueAsString(segmentos);
+				ResponseRet.setMsg(jsonSegmentos);
+				ResponseRet.setErrorMessage("Loja detalhada com sucesso!");
+				jsonData = objectMapper.writeValueAsString(ResponseRet);				
+			} catch (JsonProcessingException e) {
+				ResponseRet.setErrorMessage(e.getMessage());
+			}												
 		}
 		else{
-			Response.status(400);
-		}
-		return "Não foi possível encontrar os detalhes de segmentos da loja";
+			ResponseRet.setCodErro(ResponseMessage.RET_ERROR);
+			ResponseRet.setMsg("Não foi possível encontrar os detalhes de segmentos da loja");
+			ResponseRet.setErrorMessage("Erro no detalhamento da loja");
+		}		
+		return Response.status(ResponseRet.getCodErro()).entity(jsonData).build();
 	} 
 }

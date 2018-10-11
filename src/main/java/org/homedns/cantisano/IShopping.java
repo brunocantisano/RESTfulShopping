@@ -3,6 +3,8 @@
  */
 package org.homedns.cantisano;
 
+import javax.ws.rs.core.Response;
+
 /**
  * <p>
  * Interface que define as métodos que serão implementados para manipulação de lojas do shopping.
@@ -15,11 +17,11 @@ package org.homedns.cantisano;
  * <p>
  */
 public interface IShopping {
-	String login(String jsonData);
-	String add(String jsonData);
-	String edit(String jsonData);
-	String delete(String jsonData);
-	String list();
-	String search(String jsonData);
-	String details(String jsonData);
+	Response login(String jsonData);
+	Response add(String jsonData);
+	Response edit(String jsonData);
+	Response delete(String jsonData);
+	Response list();
+	Response search(String jsonData);
+	Response details(String jsonData);
 }
