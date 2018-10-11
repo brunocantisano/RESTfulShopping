@@ -1,0 +1,34 @@
+[
+    {
+        "cnpj": 58078063000140,
+        "nome": "Renner",
+        "piso": 1,
+        "numero": 1,
+        "dataSaida": "",
+        "segmentos": "Moda Masculina, Moda Feminina, Surfwear, Calçados"
+    },
+    {
+        "cnpj": 61481220000179,
+        "nome": "casa&video",
+        "piso": 1,
+        "numero": 2,
+        "dataSaida": "2018-10-10",
+        "segmentos": "Casa, Informática, Multimídia, Eletrodomésticos"
+    },
+    {
+        "cnpj": 41692173000103,
+        "nome": "kalunga",
+        "piso": 2,
+        "numero": 1,
+        "dataSaida": "",
+        "segmentos": "Papelaria, Informática, Escritório"
+    },
+    {
+        "cnpj": 59728036000139,
+        "nome": "americanas",
+        "piso": 2,
+        "numero": 2,
+        "dataSaida": "",
+        "segmentos": "Infantil, Escola, Escritório, Comida"
+    }
+]
