@@ -20,7 +20,7 @@ Tecnologias Escolhidas:
 
 Banco de Dados:
 - SQL Server (nome/senha: usuario/senha) - Backup (shopping_20181011.zip)
-
+- Database name: shopping
 * Versões:
 - wildfly-10.0.0.Final
 - eclipse: Version: Neon.3 Release (4.6.3) Build id: 20170314-1500

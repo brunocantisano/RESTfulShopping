@@ -9,6 +9,9 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import javax.ws.rs.core.Response;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -35,54 +38,54 @@ public class ShoppingTest {
 	@Test
 	public void testLoginFailed() throws IOException {
 		String jsonData = new String(Files.readAllBytes(Paths.get("C:\\github\\RestfullShopping\\src\\main\\resources\\json\\loginInvalido.json")));
-		String result = shop.login(jsonData);
-		assertEquals("Login inválido", result);
+		Response result = shop.login(jsonData);
+		assertEquals(ResponseMessage.RET_ERROR, result.getStatus());
 	}
 
 	@Test
 	public void testLoginOk() throws IOException {
 		String jsonData = new String(Files.readAllBytes(Paths.get("C:\\github\\RestfullShopping\\src\\main\\resources\\json\\loginOk.json")));
-		String result = shop.login(jsonData);
-		assertEquals("Login realizado com sucesso", result);
+		Response result = shop.login(jsonData);
+		assertEquals(ResponseMessage.RET_OK, result.getStatus());
 	}
 
 	@Test
 	public void testAdd() throws IOException {
 		String jsonData = new String(Files.readAllBytes(Paths.get("C:\\github\\RestfullShopping\\src\\main\\resources\\json\\add.json")));
-		String result = shop.add(jsonData);
-		assertEquals("Loja adicionada com sucesso!", result);
+		Response result = shop.add(jsonData);
+		assertEquals(ResponseMessage.RET_OK, result.getStatus());
 	}
 
 	@Test
 	public void testEdit() throws IOException {
 		String jsonData = new String(Files.readAllBytes(Paths.get("C:\\github\\RestfullShopping\\src\\main\\resources\\json\\edit.json")));
-		String result = shop.edit(jsonData);
-		assertEquals("Loja editada com sucesso!", result);
+		Response result = shop.edit(jsonData);
+		assertEquals(ResponseMessage.RET_OK, result.getStatus());
 	}
 
 	@Test
 	public void testDelete() throws IOException {
 		String jsonData = new String(Files.readAllBytes(Paths.get("C:\\github\\RestfullShopping\\src\\main\\resources\\json\\add.json")));
-		String result = shop.delete(jsonData);
-		assertEquals("Loja removida com sucesso!", result);
+		Response result = shop.delete(jsonData);
+		assertEquals(ResponseMessage.RET_OK, result.getStatus());
 	}
 
 	@Test
 	public void testList() {
-		String result = shop.list();
-		assertNotNull(result);
+		Response result = shop.list();
+		assertEquals(ResponseMessage.RET_OK, result.getStatus());
 	}
 
 	@Test
 	public void testSearch() {
-		String result = shop.search("americanas");
-		assertNotNull(result);
+		Response result = shop.search("americanas");
+		assertEquals(ResponseMessage.RET_OK, result.getStatus());
 	}
 
 	@Test
 	public void testDetails() throws IOException {
 		String jsonData = new String(Files.readAllBytes(Paths.get("C:\\github\\RestfullShopping\\src\\main\\resources\\json\\loja.json")));
-		String result = shop.details(jsonData);
-		assertNotNull(result);
+		Response result = shop.details(jsonData);
+		assertEquals(ResponseMessage.RET_OK, result.getStatus());
 	}
 }
